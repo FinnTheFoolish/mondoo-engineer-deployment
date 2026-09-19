@@ -1,0 +1,20 @@
+policies:
+  - uid: mondoo-engineer-container
+    name: Mondoo Engineer Container Policy
+    version: 1.0.0
+    scoring_system: highest impact
+    docs:
+      desc: |
+        Application-specific requirements for the Mondoo Engineer container.
+    groups:
+      - title: Application packaging
+        checks:
+          - uid: application-binary-location
+            title: Application binary is copied to the expected location
+            mql: docker.file.finalStage.copy.any(dst == "/app/mondoo-engineer")
+            impact: 100
+
+          - uid: application-port-exposed
+            title: HTTP application port is exposed
+            mql: docker.file.finalStage.expose.any(port == 8080)
+            impact: 100
