@@ -9,6 +9,10 @@ permissions:
   contents: read
   packages: write
 
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository_owner }}/mondoo-engineer
+
 jobs:
   build:
     name: Build and publish container
@@ -28,14 +32,14 @@ jobs:
             --fail \
             --location \
             --output build/mondoo-engineer-linux-amd64 \
-            "https://github.com/YOUR_USERNAME/mondoo-engineer-app/releases/download/${VERSION}/mondoo-engineer-linux-amd64"
+            "https://github.com/${{ github.repository_owner }}/mondoo-engineer-app/releases/download/${VERSION}/mondoo-engineer-linux-amd64"
 
           chmod +x build/mondoo-engineer-linux-amd64
 
       - name: Log in to GHCR
         uses: docker/login-action@v3
         with:
-          registry: ghcr.io
+          registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ github.token }}
 
@@ -43,10 +47,10 @@ jobs:
         run: |
           docker build \
             --build-arg BINARY=build/mondoo-engineer-linux-amd64 \
-            --tag ghcr.io/YOUR_USERNAME/mondoo-engineer:${{ github.event.client_payload.version }} \
+            --tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.event.client_payload.version }} \
             .
 
       - name: Push image
         run: |
           docker push \
-            ghcr.io/YOUR_USERNAME/mondoo-engineer:${{ github.event.client_payload.version }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.event.client_payload.version }}
