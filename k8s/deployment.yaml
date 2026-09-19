@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mondoo-engineer
+  labels:
+    app: mondoo-engineer
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mondoo-engineer
+  template:
+    metadata:
+      labels:
+        app: mondoo-engineer
+    spec:
+      containers:
+        - name: mondoo-engineer
+          image: ghcr.io/YOUR_USERNAME/mondoo-engineer:v1.0.0
+          ports:
+            - name: http
+              containerPort: 8080
+          resources:
+            requests:
+              cpu: 10m
+              memory: 16Mi
+            limits:
+              cpu: 100m
+              memory: 64Mi
