@@ -3,11 +3,23 @@ policies:
     name: Mondoo Engineer Container Policy
     version: 1.0.0
     scoring_system: highest impact
+
+    tags:
+      mondoo.com/category: application
+      mondoo.com/platform: dockerfile
+
+    require:
+      - provider: os
+
     docs:
       desc: |
         Application-specific requirements for the Mondoo Engineer container.
+
     groups:
       - title: Application packaging
+        filters:
+          - mql: asset.platform == "dockerfile"
+
         checks:
           - uid: application-binary-location
             title: Application binary is copied to the expected location
